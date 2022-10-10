@@ -38,7 +38,7 @@ t =      / \     / \
       num 1  true  true num 2
 -}
 {- END FIX -}
-t = {!!}
+t = (false >o (num 1 >o true)) >o (true >o (true >o num 2))
 {- BEGIN FIX -}
 test-t-1 : left (left t) ≡ false
 test-t-1 = refl
