@@ -73,8 +73,8 @@ M=*2+1 n = un D.⟦ n ⟧
 D' : DepModel
 D' = record
   { Nat∙ = λ n → Lift (n + 0 ≡ n)
-  ; Zero∙ = {!!} -- ez konnyu
-  ; Suc∙ = λ (mk n∙) → mk {!!} -- hasznald "cong suc"-ot es "n∙"-t
+  ; Zero∙ = mk refl -- ez konnyu
+  ; Suc∙ = λ (mk n∙) → mk (cong suc n∙) -- hasznald "cong suc"-ot es "n∙"-t
   }
 module D' = DepModel D'
 idr+ : (n : ℕ) → n + 0 ≡ n
@@ -84,8 +84,8 @@ idr+ n = un D'.⟦ n ⟧
 D'' : DepModel
 D'' = record
   { Nat∙ = λ m → ∀ n o → Lift ((m + n) + o ≡ m + (n + o))
-  ; Zero∙ = λ _ _ → mk {!!}
-  ; Suc∙ = λ {m} m∙ n o → mk {!!} -- hasznald "cong suc"-ot, "m∙"-ot, es "un"-t
+  ; Zero∙ = λ _ _ → mk refl
+  ; Suc∙ = λ {m} m∙ n o → mk (cong suc (un( m∙ n o))) -- hasznald "cong suc"-ot, "m∙"-ot, es "un"-t
   }
 module D'' = DepModel D''
 ass+ : (m n o : ℕ) → (m + n) + o ≡ m + (n + o)
@@ -95,8 +95,8 @@ ass+ m n o = un (D''.⟦ m ⟧ n o)
 D''' : DepModel
 D''' = record
   { Nat∙ = λ m → ∀ n → Lift (m + suc n ≡ suc m + n)
-  ; Zero∙ = λ n → {!!}
-  ; Suc∙ = λ {m} m∙ n → {!!} -- hasznald "cong suc"-ot, "m∙"-t, "un"-t
+  ; Zero∙ = λ n → mk (cong suc refl)
+  ; Suc∙ = λ {m} m∙ n → mk (cong suc (un (m∙ n))) -- hasznald "cong suc"-ot, "m∙"-t, "un"-t
   }
 module D''' = DepModel D'''
 +suc : (m n : ℕ) → m + suc n ≡ suc m + n
@@ -106,14 +106,14 @@ module D''' = DepModel D'''
 D'''' : DepModel
 D'''' = record
   { Nat∙ = λ m → ∀ n → Lift (m + n ≡ n + m)
-  ; Zero∙ = λ n → {!!} -- hasznald idr+-t es ⁻¹-et!
+  ; Zero∙ = λ n → mk ((idr+ n)⁻¹) -- hasznald idr+-t es ⁻¹-et!
   ; Suc∙ = λ {m} m∙ n → mk ((
     suc (m + n)
-                    ≡⟨ {!!} ⟩ -- hasznald "cong suc"-ot, "m∙"-t, "un"-t
+                    ≡⟨ cong suc (un (m∙ n)) ⟩ -- hasznald "cong suc"-ot, "m∙"-t, "un"-t
     suc (n + m)
-                    ≡⟨ {!!} ⟩ -- ez konnyu
+                    ≡⟨ cong suc refl ⟩ -- ez konnyu
     suc n + m
-                    ≡⟨ {!!} ⟩ -- hasznald "+suc"-ot es "_⁻¹"-t
+                    ≡⟨ (+suc n m )⁻¹ ⟩ -- hasznald "+suc"-ot es "_⁻¹"-t
     n + suc m
     ∎))
   }
@@ -124,9 +124,13 @@ module D'''' = DepModel D''''
 -- valami egyenloseg
 D''''' : DepModel {lzero}
 D''''' = record
-  { Nat∙ = {!!} -- lasd lejjebb, hogy mi legyen Nat∙
-  ; Zero∙ = {!!}
-  ; Suc∙ = {!!}
+  { Nat∙ = λ n → Lift(n + 3 ≡ 1 + n + 2) -- lasd lejjebb, hogy mi legyen Nat∙
+  ; Zero∙ = mk refl
+  ; Suc∙ =  λ {n} (mk n∙) → mk (suc (n + 3)
+          ≡⟨ cong suc n∙ ⟩
+      
+    suc (suc (n + 2)) 
+          ∎) 
   }
 module D''''' = DepModel D'''''
 +2=1++1 : (n : ℕ) → n + 3 ≡ 1 + n + 2
