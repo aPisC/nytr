@@ -49,8 +49,8 @@ D : DepModel
 {- END FIX -}
 D = record
   { Nat∙ = λ n → Lift (n + 2 ≡ 1 + n + 1)
-  ; Zero∙ = {!!}
-  ; Suc∙ = {!!}
+  ; Zero∙ = mk refl
+  ; Suc∙ = λ (mk n∙) → mk (cong suc n∙)
   }
 {- BEGIN FIX -}
 module D = DepModel D
