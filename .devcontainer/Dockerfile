@@ -3,6 +3,7 @@ FROM ubuntu:kinetic
 
 RUN apt update
 RUN apt install -y --no-install-recommends agda
+RUN apt install -y git
 #RUN apt install -y agda-mode
 
 
