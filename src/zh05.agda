@@ -135,7 +135,17 @@ open I
 
 zh1 : ite true (def (num 2) (isZero v0)) false ≡ false {◇}
 {- END FIX -}
-zh1 = {!!}
+zh1 = 
+  ite true (isZero q [ id ,o num 2 ]) false 
+    ≡⟨ iteβ₁ ⟩ 
+  (isZero q [ id ,o num 2 ]) 
+    ≡⟨ isZero[] ⟩ 
+  isZero (q [ id ,o num 2 ]) 
+    ≡⟨ cong (λ z → isZero z) ▹β₂ ⟩ 
+  isZero (num 2) 
+    ≡⟨ isZeroβ₂ ⟩ 
+  false 
+    ∎
 
 {- BEGIN FIX -}
 zh2 : p ⊚ ((ε ,o true) ⊚ id) ≡ ε {◇}
