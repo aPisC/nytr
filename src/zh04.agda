@@ -117,9 +117,9 @@ zh1 : (A : Ty)(Γ : Con)(a : Tm Γ A) → a [ id ⊚ id ] ≡ a
 zh1 A Γ a =
 {- END FIX -}
   a [ id ⊚ id ]
-                  ≡⟨ {!!} ⟩
+                  ≡⟨ cong (λ z → a [ z ]) idl ⟩
   a [ id ]
-                  ≡⟨ {!!} ⟩
+                  ≡⟨ [id] ⟩
   a
                   ∎
 
@@ -128,10 +128,10 @@ zh2 : (A : Ty)(B : Ty)(Γ : Con)(a : Tm Γ A)(b : Tm Γ B) → (p ⊚ p) ⊚ (id
 zh2 A B Γ a b =
 {- END FIX -}
   (p ⊚ p) ⊚ (id ,o a ,o b)
-                  ≡⟨ {!!} ⟩
+                  ≡⟨ ass ⟩
   p ⊚ (p ⊚ (id ,o a ,o b))
-                  ≡⟨ {!!} ⟩
-  {!!}
-                  ≡⟨ {!!} ⟩
+                  ≡⟨ cong (λ z → p ⊚ z) ▹β₁ ⟩
+  p ⊚ (id ,o a)
+                  ≡⟨ ▹β₁ ⟩
   id
                   ∎

@@ -120,38 +120,38 @@ open I
 iteex : ite {◇} (isZero (num 2)) (num 0) (num 1 +o num 2) ≡ num 3
 iteex =
   ite {◇} (isZero (num 2)) (num 0) (num 1 +o num 2)
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ cong  (λ b → ite b (num 0) (num 1 +o num 2)) isZeroβ₂ ⟩
   ite {◇} false (num 0) (num 1 +o num 2)
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ iteβ₂ ⟩
   num 1 +o num 2
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ +β ⟩
   num 3
                                                            ∎
 
 iteex' : ite {◇} (isZero (num 2)) (num 0) (num 1 +o num 2) ≡ num 3
 iteex' =
   ite {◇} (isZero (num 2)) (num 0) (num 1 +o num 2)
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ cong (λ f →  ite (isZero (num 2)) (num 0) f ) +β ⟩
   ite {◇} (isZero (num 2)) (num 0) (num 3)
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ cong (λ v → ite v (num 0) (num 3)) isZeroβ₂ ⟩
   ite {◇} false (num 0) (num 3)
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ iteβ₂ ⟩
   num 3
                                                            ∎
 
 sum : num {◇} 1 +o (num 2 +o num 3) ≡ num 6
 sum =
   num 1 +o (num 2 +o num 3)
-                                                           ≡⟨ {!!} ⟩
-  {!!}
-                                                           ≡⟨ {!!} ⟩
+                                                           ≡⟨ cong (λ v → num 1 +o v) +β ⟩
+  num 1 +o num 5
+                                                           ≡⟨ +β ⟩
   num 6
                                                            ∎
 
 -- valtozok
 
 v2 : ∀{Γ A B C} → Tm (Γ ▹ A ▹ B ▹ C) A
-v2 = {!!}
+v2 = {! !}
 
 v2= : ∀{Γ A B C} → v2 {Γ}{A}{B}{C} ≡ q [ p ] [ p ]
 v2= {Γ}{A}{B}{C} =
