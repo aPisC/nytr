@@ -150,4 +150,10 @@ zh1 =
 {- BEGIN FIX -}
 zh2 : p ⊚ ((ε ,o true) ⊚ id) ≡ ε {◇}
 {- END FIX -}
-zh2 = {!!}
+zh2 = 
+  p ⊚ ((ε ,o true) ⊚ id) 
+    ≡⟨ cong (λ z → p ⊚ z) idr ⟩ 
+  p ⊚ (ε ,o true) 
+    ≡⟨ ▹β₁ ⟩ 
+  ε 
+    ∎
