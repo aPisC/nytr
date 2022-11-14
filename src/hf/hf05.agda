@@ -134,30 +134,81 @@ module I where
 open I
 
 {- END FIX -}
-
-eq-1 : def true (ite v0 (num 3) (num 2) +o (num 1)) ≡ num {◇} 4
-eq-1 = {!!}
+eq-1 : def true (ite v0 ((num 3) +o (num 1)) (num 2)) ≡ num {◇} 4
+eq-1 = 
+  def true (ite v0 ((num 3) +o (num 1)) (num 2))
+         ≡⟨ refl ⟩
+  (ite q ((num 3) +o (num 1)) (num 2)) [ id ,o true ]
+         ≡⟨ ite[] ⟩
+  ite (q [ id ,o true ]) (num 3 +o num 1 [ id ,o true ]) (num 2 [ id ,o true ])
+         ≡⟨ cong (λ z → (ite z (num 3 +o num 1 [ id ,o true ]) (num 2 [ id ,o true ])))  ▹β₂ ⟩
+  ite (true) (num 3 +o num 1 [ id ,o true ]) (num 2 [ id ,o true ])
+         ≡⟨ iteβ₁ ⟩
+  ((num 3 +o num 1) [ id ,o true ])
+         ≡⟨ cong (λ z → z [ id ,o true ]) +β ⟩
+  (num 4 [ id ,o true ])
+         ≡⟨ num[] ⟩
+  num 4 
+         ∎
 
 v1β : ∀{Γ Δ A B}{γ : Sub Δ Γ}{a : Tm Δ A}{b : Tm Δ B} → v1 [ γ ,o a ,o b ] ≡ a
-v1β = {!!}
+v1β {Γ} {Δ} {A} {B} {γ} {a} {b} = 
+    q [ p ] [ γ ,o a ,o b ]
+        ≡⟨ ([∘])⁻¹ ⟩
+    q [ p ⊚ (γ ,o a ,o b) ]
+        ≡⟨ cong (λ z → q [ z ]) ▹β₁ ⟩
+    q [ γ ,o a ]
+        ≡⟨ ▹β₂ ⟩
+    a
+        ∎
 
 v2β : ∀{Γ Δ A B C}{γ : Sub Δ Γ}{a : Tm Δ A}{b : Tm Δ B}{c : Tm Δ C} → v2 [ γ ,o a ,o b ,o c ] ≡ a
-v2β = {!!}
+v2β {Γ} {Δ} {A} {B} {C} {γ} {a} {b} {c} = 
+    q [ p ⊚ p ] [ γ ,o a ,o b ,o c ] 
+        ≡⟨ ([∘])⁻¹ ⟩
+    q [ (p ⊚ p) ⊚ (γ ,o a ,o b ,o c) ]
+        ≡⟨ cong (λ z → q [ z ]) ass ⟩ 
+    q [ p ⊚ (p ⊚ (γ ,o a ,o b ,o c)) ]
+        ≡⟨ cong (λ z → q [ p ⊚ z ]) ▹β₁ ⟩
+    q [ p ⊚ (γ ,o a ,o b) ]
+        ≡⟨ cong (λ z → q [ z ]) ▹β₁ ⟩
+    q [ γ ,o a ]
+        ≡⟨ ▹β₂ ⟩
+    a 
+        ∎
 
 eq-2 : ite v1 (isZero v0) false [ ε ,o true ,o num 0 ] ≡ true {◇}
-eq-2 = {!!}
+eq-2 = 
+    ite (q [ p ]) (isZero q) false [ ε ,o true ,o num zero ] 
+        ≡⟨ ite[] ⟩ 
+    ite (q [ p ] [ ε ,o true ,o num zero ]) (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ]) 
+        ≡⟨ cong (λ z → ite z (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ])) (([∘])⁻¹) ⟩ 
+    ite (q [ p ⊚ (ε ,o true ,o num zero) ]) (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ])
+        ≡⟨ cong (λ z → ite (q [ z ]) (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ]))  ▹β₁ ⟩ 
+    ite (q [ (ε ,o true ) ]) (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ])
+        ≡⟨ cong (λ z → ite z (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ])) ▹β₂ ⟩ 
+    ite true (isZero q [ ε ,o true ,o num zero ]) (false [ ε ,o true ,o num zero ])
+        ≡⟨ iteβ₁ ⟩ 
+    (isZero q) [ ε ,o true ,o num zero ]
+        ≡⟨ isZero[] ⟩ 
+    isZero (q [ ε ,o true ,o num zero ])
+        ≡⟨ cong (λ z → isZero z) ▹β₂ ⟩ 
+    isZero (num zero)
+        ≡⟨ isZeroβ₁ ⟩ 
+    true 
+        ∎
 
 eq-3 : isZero (ite v0 (num 1) v1) [ ε ,o num 0 ,o false ] ≡ true {◇}
 eq-3 = {!!}
 
 sub-eq-1 : {Γ : Con} → {σ δ : Sub Γ ◇} → σ ≡ δ
-sub-eq-1 = {!!}
+sub-eq-1 {Γ} {σ} {δ} = σ ≡⟨ (◇η {Γ} {σ}) ⟩ ε ≡⟨ (◇η {Γ} {δ})⁻¹ ⟩ δ ∎
 
 sub-eq-2 : {Γ Δ : Con} → {σ : Sub Γ Δ} → ε ⊚ σ ≡ ε
-sub-eq-2 = {!!}
+sub-eq-2 = ◇η
 
 sub-eq-3 : ε ≡ id
-sub-eq-3 = {!!}
+sub-eq-3 = (◇η)⁻¹
 
 sub-eq-4 : {Γ : Con}{A : Ty} → (p ,o q) ≡ id {Γ ▹ A}
 sub-eq-4 = {!!}
