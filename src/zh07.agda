@@ -7,17 +7,17 @@ open I
 
 neg : {Γ : Con} → Tm Γ (Bool ⇒ Bool)
 {- END FIX -}
-neg = {!!}
+neg = lam (ite v0 false true)
 
 {- BEGIN FIX -}
 xor : {Γ : Con} → Tm Γ (Bool ⇒ Bool ⇒ Bool)
 {- END FIX -}
-xor = {!!}
+xor = lam (lam (ite v0 (ite v1 false true) v1))
 
 {- BEGIN FIX -}
 isNotZero : ∀{Γ} → Tm Γ (Nat ⇒ Bool)
 {- END FIX -}
-isNotZero = {!!}
+isNotZero = lam (ite (isZero v0) false true)
 
 {- BEGIN FIX -}
 get1 : ∀{Γ Δ Θ A B} → Sub Δ (Γ ▹ A ▹ B) → Sub Θ Δ → Tm Θ A
