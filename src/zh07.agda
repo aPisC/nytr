@@ -12,12 +12,12 @@ neg = lam (ite v0 false true)
 {- BEGIN FIX -}
 xor : {Γ : Con} → Tm Γ (Bool ⇒ Bool ⇒ Bool)
 {- END FIX -}
-xor = lam (lam (ite v0 (ite v1 false true) v1))
+xor = lam (lam (ite v0 (neg $ v1) v1))
 
 {- BEGIN FIX -}
 isNotZero : ∀{Γ} → Tm Γ (Nat ⇒ Bool)
 {- END FIX -}
-isNotZero = lam (ite (isZero v0) false true)
+isNotZero = lam  (neg $ (isZero v0) )
 
 {- BEGIN FIX -}
 get1 : ∀{Γ Δ Θ A B} → Sub Δ (Γ ▹ A ▹ B) → Sub Θ Δ → Tm Θ A
